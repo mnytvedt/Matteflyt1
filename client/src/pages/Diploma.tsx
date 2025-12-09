@@ -32,7 +32,7 @@ export default function Diploma() {
       return;
     }
 
-    const subject = encodeURIComponent(`Math Dash Diplom - ${name}`);
+    const subject = encodeURIComponent(`MatteFlyt Diplom - ${name}`);
     
     let body = `Elev: ${name}\n`;
     body += `Dato: ${new Date().toLocaleDateString()}\n\n`;
@@ -134,7 +134,7 @@ export default function Diploma() {
           </div>
           
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Har fullført alle {totalLevels} nivåer i Math Dash med fremragende nøyaktighet og hurtighet.
+            Har fullført alle {totalLevels} nivåer i MatteFlyt med fremragende nøyaktighet og hurtighet.
           </p>
 
           <div className="grid grid-cols-2 gap-8 max-w-md mx-auto mb-12">
@@ -161,7 +161,7 @@ export default function Diploma() {
               <div className="w-48 border-b-2 border-slate-400 mb-2">
                 <img src="/attached_assets/logo.png" className="h-12 mx-auto opacity-50 grayscale" alt="" />
               </div>
-              <p className="text-slate-500 font-serif italic">Math Dash Offisiell</p>
+              <p className="text-slate-500 font-serif italic">MatteFlyt Offisiell</p>
             </div>
           </div>
         </div>

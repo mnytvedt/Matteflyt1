@@ -32,7 +32,7 @@ export default function Home() {
         </motion.div>
 
         <h1 className="text-6xl md:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-secondary mb-4 drop-shadow-sm">
-          Math Dash
+          MatteFlyt
         </h1>
         
         <p className="text-xl text-muted-foreground mb-12 font-body max-w-md mx-auto">
