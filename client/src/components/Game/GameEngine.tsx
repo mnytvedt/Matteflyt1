@@ -45,9 +45,17 @@ export default function GameEngine({ level }: GameEngineProps) {
   const handleSubmit = () => {
     if (currentInput === "") return;
     
-    const answer = parseInt(currentInput);
+    const inputVal = parseInt(currentInput);
     const currentQuestion = questions[currentIndex];
-    const isCorrect = answer === currentQuestion.answer;
+    
+    let isCorrect = false;
+    // Check based on what was missing
+    if (currentQuestion.missingPosition === 'num2') {
+      isCorrect = inputVal === currentQuestion.num2;
+    } else {
+      isCorrect = inputVal === currentQuestion.answer;
+    }
+
     const timeTaken = (Date.now() - startTime) / 1000;
 
     // Show feedback
@@ -154,6 +162,19 @@ export default function GameEngine({ level }: GameEngineProps) {
     );
   }
 
+  // Helper to render the input box
+  const InputBox = () => (
+    <div className={cn(
+      "w-32 h-20 rounded-xl border-4 flex items-center justify-center text-5xl font-display font-bold bg-background shadow-inner mx-2",
+      feedback === 'correct' ? "border-green-400 text-green-600" :
+      feedback === 'incorrect' ? "border-red-400 text-red-600" :
+      "border-muted focus-within:border-primary text-primary"
+    )}>
+      {currentInput}
+      <span className="animate-pulse text-muted-foreground/30">|</span>
+    </div>
+  );
+
   return (
     <div className="max-w-md mx-auto w-full">
       {/* Progress Header */}
@@ -175,34 +196,40 @@ export default function GameEngine({ level }: GameEngineProps) {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           <Card className={cn(
-            "p-8 mb-6 flex flex-col items-center justify-center min-h-[200px] border-4 shadow-xl transition-colors duration-300",
+            "p-8 mb-6 flex flex-col items-center justify-center min-h-[200px] border-4 shadow-xl transition-colors duration-300 relative",
             feedback === 'correct' ? "border-green-400 bg-green-50" :
             feedback === 'incorrect' ? "border-red-400 bg-red-50" :
             "border-primary/20"
           )}>
-            <div className="flex items-center gap-4 text-7xl md:text-8xl font-display font-bold text-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-6xl sm:text-7xl md:text-8xl font-display font-bold text-foreground">
+              {/* First Number */}
               <span>{currentQuestion.num1}</span>
+              
+              {/* Operator */}
               <span className="text-primary">{currentQuestion.operator === 'add' ? '+' : '-'}</span>
-              <span>{currentQuestion.num2}</span>
-            </div>
-            
-            <div className="mt-8 flex items-center gap-4">
-              <span className="text-4xl text-muted-foreground">=</span>
-              <div className={cn(
-                "w-32 h-20 rounded-xl border-4 flex items-center justify-center text-5xl font-display font-bold bg-background shadow-inner",
-                feedback === 'correct' ? "border-green-400 text-green-600" :
-                feedback === 'incorrect' ? "border-red-400 text-red-600" :
-                "border-muted focus-within:border-primary text-primary"
-              )}>
-                {currentInput}
-                <span className="animate-pulse text-muted-foreground/30">|</span>
-              </div>
+              
+              {/* Second Number or Input */}
+              {currentQuestion.missingPosition === 'num2' ? (
+                <InputBox />
+              ) : (
+                <span>{currentQuestion.num2}</span>
+              )}
+              
+              {/* Equals Sign */}
+              <span className="text-muted-foreground mx-2">=</span>
+              
+              {/* Answer or Input */}
+              {currentQuestion.missingPosition === 'num2' ? (
+                <span className="text-primary">{currentQuestion.answer}</span>
+              ) : (
+                <InputBox />
+              )}
             </div>
             
             {feedback === 'correct' && (
               <motion.div 
                 initial={{ scale: 0 }} animate={{ scale: 1 }}
-                className="absolute top-4 right-4 text-green-500"
+                className="absolute top-2 right-2 text-green-500"
               >
                 <CheckCircle className="w-8 h-8 fill-green-100" />
               </motion.div>
@@ -210,7 +237,7 @@ export default function GameEngine({ level }: GameEngineProps) {
             {feedback === 'incorrect' && (
               <motion.div 
                 initial={{ scale: 0 }} animate={{ scale: 1 }}
-                className="absolute top-4 right-4 text-red-500"
+                className="absolute top-2 right-2 text-red-500"
               >
                 <XCircle className="w-8 h-8 fill-red-100" />
               </motion.div>
