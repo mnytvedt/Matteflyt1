@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { LevelConfig, Question, generateQuestion } from "@/lib/levels";
+import { saveProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
 interface GameEngineProps {
@@ -124,6 +125,9 @@ export default function GameEngine({ level }: GameEngineProps) {
     const accuracy = Math.round((score / level.questionCount) * 100);
     const avgTime = results.reduce((acc, curr) => acc + curr.time, 0) / results.length;
     const isSuccess = accuracy >= level.passingScore;
+    
+    // Save progress
+    saveProgress(level.id, accuracy);
 
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 animate-in zoom-in-95 duration-500">

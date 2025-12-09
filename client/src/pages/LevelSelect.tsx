@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowLeft, Lock, Star, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LEVELS, LevelConfig } from "@/lib/levels";
+import { getProgress, isLevelUnlocked, LevelProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
 export default function LevelSelect() {
+  // Force re-render on mount to get latest localstorage
+  const [progress, setProgress] = useState<Record<number, LevelProgress>>({});
+
+  useEffect(() => {
+    setProgress(getProgress());
+  }, []);
+
   return (
     <div className="min-h-screen p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
@@ -20,32 +28,39 @@ export default function LevelSelect() {
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {LEVELS.map((level, index) => (
-            <LevelCard key={level.id} level={level} index={index} />
-          ))}
+          {LEVELS.map((level, index) => {
+            const unlocked = isLevelUnlocked(level.id);
+            const levelData = progress[level.id];
+            const stars = levelData ? levelData.stars : 0;
+            
+            return (
+              <LevelCard 
+                key={level.id} 
+                level={level} 
+                index={index} 
+                locked={!unlocked}
+                stars={stars}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
 
-function LevelCard({ level, index }: { level: LevelConfig; index: number }) {
-  const isLocked = level.locked;
-  
-  // Mock high score for now
-  const stars = Math.floor(Math.random() * 4); // 0-3 stars
-
+function LevelCard({ level, index, locked, stars }: { level: LevelConfig; index: number; locked: boolean; stars: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
     >
-      <Link href={isLocked ? "#" : `/play/${level.id}`}>
+      <Link href={locked ? "#" : `/play/${level.id}`}>
         <div className={cn(
           "group relative overflow-hidden rounded-3xl p-6 h-full border-2 transition-all duration-300",
-          isLocked 
-            ? "bg-muted/50 border-muted-foreground/20 cursor-not-allowed grayscale" 
+          locked 
+            ? "bg-muted/50 border-muted-foreground/20 cursor-not-allowed grayscale opacity-70" 
             : "bg-card border-border hover:border-primary/50 hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-card to-primary/5"
         )}>
           <div className="flex justify-between items-start mb-4">
@@ -56,7 +71,7 @@ function LevelCard({ level, index }: { level: LevelConfig; index: number }) {
             )}>
               {level.id}
             </span>
-            {isLocked ? (
+            {locked ? (
               <Lock className="w-6 h-6 text-muted-foreground" />
             ) : (
               <div className="flex gap-1">
@@ -82,7 +97,7 @@ function LevelCard({ level, index }: { level: LevelConfig; index: number }) {
 
           <div className="flex items-center justify-between text-sm font-bold text-muted-foreground/80 mt-auto">
             <span>{level.questionCount} Questions</span>
-            {!isLocked && (
+            {!locked && (
               <span className="flex items-center text-primary opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-4 group-hover:translate-x-0">
                 Play <Play className="w-4 h-4 ml-1 fill-current" />
               </span>
