@@ -4,27 +4,40 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Lock, Star, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LEVELS, LevelConfig } from "@/lib/levels";
-import { getProgress, isLevelUnlocked, LevelProgress } from "@/lib/progress";
+import { getProgress, isLevelUnlocked, isAllLevelsCompleted, LevelProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
 export default function LevelSelect() {
   // Force re-render on mount to get latest localstorage
   const [progress, setProgress] = useState<Record<number, LevelProgress>>({});
+  const [allCompleted, setAllCompleted] = useState(false);
 
   useEffect(() => {
     setProgress(getProgress());
+    setAllCompleted(isAllLevelsCompleted());
   }, []);
 
   return (
-    <div className="min-h-screen p-4 sm:p-8">
+    <div className="min-h-screen p-4 sm:p-8 pb-24">
       <div className="max-w-6xl mx-auto">
-        <header className="flex items-center gap-4 mb-12">
-          <Link href="/">
-            <Button variant="ghost" size="icon" className="rounded-full hover:bg-muted/50">
-              <ArrowLeft className="w-6 h-6" />
-            </Button>
-          </Link>
-          <h1 className="text-4xl font-display font-bold text-foreground">Select Level</h1>
+        <header className="flex items-center justify-between gap-4 mb-12">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Button variant="ghost" size="icon" className="rounded-full hover:bg-muted/50">
+                <ArrowLeft className="w-6 h-6" />
+              </Button>
+            </Link>
+            <h1 className="text-4xl font-display font-bold text-foreground">Select Level</h1>
+          </div>
+          
+          {allCompleted && (
+            <Link href="/diploma">
+              <Button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-full animate-bounce shadow-lg">
+                <Star className="mr-2 w-5 h-5 fill-white" />
+                View Diploma
+              </Button>
+            </Link>
+          )}
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

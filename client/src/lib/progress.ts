@@ -24,7 +24,6 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number)
   // 3 stars: >90% accuracy AND <5s speed
   // 2 stars: >80% accuracy
   // 1 star: >60% accuracy
-  // This logic is just for display stars, but unlocking logic is strict
   let stars = 0;
   if (accuracy >= 90 && avgTime < 5) stars = 3;
   else if (accuracy >= 80) stars = 2;
@@ -47,8 +46,8 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number)
 }
 
 export function isLevelUnlocked(levelId: number): boolean {
-  // First 4 levels are always unlocked
-  if (levelId <= 4) return true;
+  // Only Level 1 is unlocked by default
+  if (levelId === 1) return true;
   
   // Check if previous level was passed with >= 90% accuracy AND < 5s average time
   const progress = getProgress();
@@ -57,10 +56,21 @@ export function isLevelUnlocked(levelId: number): boolean {
   if (!prevLevel) return false;
 
   const passedAccuracy = prevLevel.accuracy >= 90;
-  // If avgTime is undefined (legacy data), we might block or allow. 
-  // Let's assume strict: must have speed data. 
-  // If user played before this update, they might need to replay.
   const passedSpeed = prevLevel.avgTime !== undefined && prevLevel.avgTime < 5;
 
   return passedAccuracy && passedSpeed;
+}
+
+export function isAllLevelsCompleted(): boolean {
+  const progress = getProgress();
+  // We have 11 levels. Check if level 11 is completed with passing grade.
+  // Actually, checking if all 11 have entries is safer.
+  // Or check if Level 11 is mastered?
+  // Let's check if all 11 levels exist in progress and have passing scores.
+  for (let i = 1; i <= 11; i++) {
+    const p = progress[i];
+    if (!p) return false;
+    if (p.accuracy < 80) return false; // Minimum passing score
+  }
+  return true;
 }
