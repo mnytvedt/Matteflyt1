@@ -205,30 +205,49 @@ export default function GameEngine({ level }: GameEngineProps) {
             feedback === 'incorrect' ? "border-red-400 bg-red-50" :
             "border-primary/20"
           )}>
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-6xl sm:text-7xl md:text-8xl font-display font-bold text-foreground">
-              {/* First Number */}
-              <span>{currentQuestion.num1}</span>
-              
-              {/* Operator */}
-              <span className="text-primary">{currentQuestion.operator === 'add' ? '+' : '-'}</span>
-              
-              {/* Second Number or Input */}
-              {currentQuestion.missingPosition === 'num2' ? (
-                <InputBox />
-              ) : (
-                <span>{currentQuestion.num2}</span>
-              )}
-              
-              {/* Equals Sign */}
-              <span className="text-muted-foreground mx-2">=</span>
-              
-              {/* Answer or Input */}
-              {currentQuestion.missingPosition === 'num2' ? (
-                <span className="text-primary">{currentQuestion.answer}</span>
-              ) : (
-                <InputBox />
-              )}
-            </div>
+            {currentQuestion.textPrompt ? (
+               // Text Question Mode
+               <div className="flex flex-col items-center gap-4">
+                 <h2 className="text-3xl sm:text-4xl font-display font-bold text-center mb-4 text-foreground">
+                   {currentQuestion.textPrompt}
+                 </h2>
+                 <InputBox />
+               </div>
+            ) : (
+              // Standard Math Equation Mode
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-5xl sm:text-6xl md:text-8xl font-display font-bold text-foreground">
+                {/* First Number */}
+                <span>{currentQuestion.num1}</span>
+                
+                {/* Operator */}
+                <span className="text-primary">{currentQuestion.operator === 'add' ? '+' : '-'}</span>
+                
+                {/* Second Number or Input */}
+                {currentQuestion.missingPosition === 'num2' ? (
+                  <InputBox />
+                ) : (
+                  <span>{currentQuestion.num2}</span>
+                )}
+
+                {/* Optional Third Number */}
+                {currentQuestion.num3 !== undefined && (
+                  <>
+                    <span className="text-primary">+</span>
+                    <span>{currentQuestion.num3}</span>
+                  </>
+                )}
+                
+                {/* Equals Sign */}
+                <span className="text-muted-foreground mx-2">=</span>
+                
+                {/* Answer or Input */}
+                {currentQuestion.missingPosition === 'num2' ? (
+                  <span className="text-primary">{currentQuestion.answer}</span>
+                ) : (
+                  <InputBox />
+                )}
+              </div>
+            )}
             
             {feedback === 'correct' && (
               <motion.div 

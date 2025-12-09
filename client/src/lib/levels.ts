@@ -11,7 +11,16 @@ export type LevelType =
   | 'sub_result_1_2'
   | 'sub_10_x'
   | 'bonds_5'
-  | 'bonds_10';
+  | 'bonds_10'
+  // New levels
+  | 'add_three_numbers_bridging' // Tiervenn og litt til (6+5+5 or similar)
+  | 'add_10_x' // 10+x
+  | 'doubles_within_20' // 6+6...10+10
+  | 'bonds_20' // 13 + _ = 20
+  | 'double_text_1_5' // Dobbelt av 3 er... (1-5)
+  | 'double_text_6_10' // Dobbelt av 6 er... (6-10)
+  | 'half_text' // Halvparten av 8 er...
+  | 'add_9_x'; // 9+x
 
 export interface LevelConfig {
   id: number;
@@ -146,6 +155,95 @@ export const LEVELS: LevelConfig[] = [
     timeLimitPerQuestion: 10,
     passingScore: 80,
     locked: false,
+  },
+  // New Levels
+  {
+    id: 12,
+    name: "Tiervenn og litt til",
+    description: "Regn ut med tre tall (f.eks 6+5+5)",
+    type: 'add_three_numbers_bridging',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 12,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 13,
+    name: "10 + x",
+    description: "10 pluss et ensifret tall",
+    type: 'add_10_x',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 8,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 14,
+    name: "Doblinger til 20",
+    description: "Doble tall fra 6 til 10",
+    type: 'doubles_within_20',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 15,
+    name: "Tiervenner til 20",
+    description: "Hva mangler for å få 20?",
+    type: 'bonds_20',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 16,
+    name: "Doble (1-5)",
+    description: "Dobbelt av et tall (1-5)",
+    type: 'double_text_1_5',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 17,
+    name: "Doble (6-10)",
+    description: "Dobbelt av et tall (6-10)",
+    type: 'double_text_6_10',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 18,
+    name: "Halvparten",
+    description: "Halvparten av et partall",
+    type: 'half_text',
+    operator: 'subtract',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 19,
+    name: "9 + x",
+    description: "9 pluss et ensifret tall",
+    type: 'add_9_x',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
   }
 ];
 
@@ -153,9 +251,11 @@ export interface Question {
   id: string;
   num1: number;
   num2: number;
+  num3?: number; // Optional third number
   operator: Operator;
   answer: number;
-  missingPosition: 'result' | 'num2'; // 'result' is standard (1+2=?), 'num2' is (1+?=3)
+  missingPosition: 'result' | 'num2' | 'num3'; // 'result' is standard (1+2=?), 'num2' is (1+?=3)
+  textPrompt?: string; // For text-based questions
 }
 
 function randomInt(min: number, max: number) {
@@ -163,9 +263,11 @@ function randomInt(min: number, max: number) {
 }
 
 export const generateQuestion = (config: LevelConfig): Question => {
-  let num1 = 0, num2 = 0, answer = 0;
-  let missingPosition: 'result' | 'num2' = 'result';
+  let num1 = 0, num2 = 0, num3: number | undefined;
+  let answer = 0;
+  let missingPosition: 'result' | 'num2' | 'num3' = 'result';
   let operator: Operator = config.operator;
+  let textPrompt: string | undefined;
 
   switch (config.type) {
     case 'add_1_0_within_10': {
@@ -257,7 +359,7 @@ export const generateQuestion = (config: LevelConfig): Question => {
       missingPosition = 'num2';
       answer = 5;
       num1 = randomInt(0, 5);
-      num2 = 5 - num1; // This is the "answer" user needs to type
+      num2 = 5 - num1;
       break;
     }
     case 'bonds_10': {
@@ -265,7 +367,86 @@ export const generateQuestion = (config: LevelConfig): Question => {
       missingPosition = 'num2';
       answer = 10;
       num1 = randomInt(0, 10);
-      num2 = 10 - num1; // This is the "answer" user needs to type
+      num2 = 10 - num1;
+      break;
+    }
+    // New Implementations
+    case 'add_three_numbers_bridging': {
+      // e.g. 6+5+5 or 8+2+5. Let's make it simpler: two numbers sum to 10.
+      // 6 + 4 + x (where x is 1-5 usually)
+      const pair = randomInt(1, 9);
+      const complement = 10 - pair;
+      const extra = randomInt(1, 9);
+      
+      // Shuffle positions
+      const pattern = Math.random();
+      if (pattern < 0.33) {
+        num1 = pair; num2 = complement; num3 = extra;
+      } else if (pattern < 0.66) {
+        num1 = extra; num2 = pair; num3 = complement;
+      } else {
+        num1 = pair; num2 = extra; num3 = complement;
+      }
+      
+      answer = num1 + num2 + num3!;
+      break;
+    }
+    case 'add_10_x': {
+      // 10 + x
+      num1 = 10;
+      num2 = randomInt(0, 9);
+      answer = num1 + num2;
+      break;
+    }
+    case 'doubles_within_20': {
+      // 6+6 to 10+10
+      const half = randomInt(6, 10);
+      num1 = half;
+      num2 = half;
+      answer = num1 + num2;
+      break;
+    }
+    case 'bonds_20': {
+      // 13 + _ = 20
+      missingPosition = 'num2';
+      answer = 20;
+      // usually start with something > 10 for simplicity or just any
+      num1 = randomInt(11, 19);
+      num2 = 20 - num1;
+      break;
+    }
+    case 'double_text_1_5': {
+      // "Dobbelt av 3 er..."
+      const base = randomInt(1, 5);
+      num1 = base;
+      num2 = base;
+      answer = base * 2;
+      textPrompt = `Dobbelt av ${base} er`;
+      break;
+    }
+    case 'double_text_6_10': {
+      // "Dobbelt av 7 er..."
+      const base = randomInt(6, 10);
+      num1 = base;
+      num2 = base;
+      answer = base * 2;
+      textPrompt = `Dobbelt av ${base} er`;
+      break;
+    }
+    case 'half_text': {
+      // "Halvparten av 8 er..." (Evens only)
+      const base = randomInt(1, 5) * 2; // 2, 4, 6, 8, 10
+      num1 = base;
+      num2 = base / 2;
+      answer = num2; // Answer is the half
+      textPrompt = `Halvparten av ${base} er`;
+      break;
+    }
+    case 'add_9_x': {
+      // 9 + x
+      num1 = 9;
+      num2 = randomInt(0, 9);
+      answer = num1 + num2;
       break;
     }
   }
@@ -274,8 +455,10 @@ export const generateQuestion = (config: LevelConfig): Question => {
     id: Math.random().toString(36).substr(2, 9),
     num1,
     num2,
+    num3,
     operator,
     answer,
-    missingPosition
+    missingPosition,
+    textPrompt
   };
 };
