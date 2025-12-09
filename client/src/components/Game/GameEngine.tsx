@@ -139,27 +139,27 @@ export default function GameEngine({ level }: GameEngineProps) {
             {isSuccess ? "🎉" : "💪"}
           </div>
           <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-card px-4 py-1 rounded-full shadow-md border text-sm font-bold whitespace-nowrap">
-            {isSuccess ? "Level Complete!" : "Try Again!"}
+            {isSuccess ? "Nivå Fullført!" : "Prøv Igjen!"}
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
           <Card className="p-4 flex flex-col items-center bg-blue-50/50 border-blue-100">
-            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Accuracy</span>
+            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Nøyaktighet</span>
             <span className="text-3xl font-display font-bold text-blue-600">{accuracy}%</span>
           </Card>
           <Card className="p-4 flex flex-col items-center bg-orange-50/50 border-orange-100">
-            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Speed</span>
+            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Fart</span>
             <span className="text-3xl font-display font-bold text-orange-600">{avgTime.toFixed(1)}s</span>
           </Card>
         </div>
 
         <div className="flex gap-4">
           <Button variant="outline" size="lg" onClick={() => setLocation('/levels')} className="rounded-full">
-            <Home className="mr-2 w-5 h-5" /> Levels
+            <Home className="mr-2 w-5 h-5" /> Nivåer
           </Button>
           <Button size="lg" onClick={() => window.location.reload()} className="rounded-full bg-primary hover:bg-primary/90">
-            <RefreshCw className="mr-2 w-5 h-5" /> Replay
+            <RefreshCw className="mr-2 w-5 h-5" /> Spill om igjen
           </Button>
         </div>
       </div>
@@ -303,7 +303,7 @@ export default function GameEngine({ level }: GameEngineProps) {
           onClick={handleSubmit}
           disabled={feedback !== 'none' || currentInput === ""}
         >
-          ENTER
+          SVAR
         </Button>
       </div>
     </div>

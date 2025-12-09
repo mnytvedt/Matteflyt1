@@ -36,21 +36,21 @@ export default function Home() {
         </h1>
         
         <p className="text-xl text-muted-foreground mb-12 font-body max-w-md mx-auto">
-          Master addition and subtraction with speed and accuracy!
+          Mestre addisjon og subtraksjon med fart og presisjon!
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link href="/levels">
             <Button size="lg" className="h-16 px-12 text-2xl rounded-full btn-pop font-display bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20">
               <Play className="mr-3 w-8 h-8 fill-current" />
-              Play Now
+              Spill Nå
             </Button>
           </Link>
           
           {/* Future feature: Leaderboard */}
           <Button variant="outline" size="lg" className="h-16 px-8 text-xl rounded-full btn-pop font-display border-2 hover:bg-accent/10">
             <Trophy className="mr-2 w-6 h-6 text-accent" />
-            Leaderboard
+            Toppliste
           </Button>
         </div>
       </motion.div>
@@ -64,7 +64,7 @@ export default function Home() {
       >
         <div className="flex items-center gap-2">
           <Star className="w-4 h-4 text-accent fill-accent" />
-          <span>Collect Stars</span>
+          <span>Samle stjerner</span>
         </div>
         <div className="flex items-center gap-2">
           <Settings className="w-4 h-4" />

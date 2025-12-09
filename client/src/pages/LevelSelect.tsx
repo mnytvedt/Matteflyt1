@@ -27,14 +27,14 @@ export default function LevelSelect() {
                 <ArrowLeft className="w-6 h-6" />
               </Button>
             </Link>
-            <h1 className="text-4xl font-display font-bold text-foreground">Select Level</h1>
+            <h1 className="text-4xl font-display font-bold text-foreground">Velg Nivå</h1>
           </div>
           
           {allCompleted && (
             <Link href="/diploma">
               <Button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-full animate-bounce shadow-lg">
                 <Star className="mr-2 w-5 h-5 fill-white" />
-                View Diploma
+                Se Diplom
               </Button>
             </Link>
           )}
@@ -109,10 +109,10 @@ function LevelCard({ level, index, locked, stars }: { level: LevelConfig; index:
           </p>
 
           <div className="flex items-center justify-between text-sm font-bold text-muted-foreground/80 mt-auto">
-            <span>{level.questionCount} Questions</span>
+            <span>{level.questionCount} Spørsmål</span>
             {!locked && (
               <span className="flex items-center text-primary opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-4 group-hover:translate-x-0">
-                Play <Play className="w-4 h-4 ml-1 fill-current" />
+                Spill <Play className="w-4 h-4 ml-1 fill-current" />
               </span>
             )}
           </div>

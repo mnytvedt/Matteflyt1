@@ -28,24 +28,24 @@ export default function Diploma() {
 
   const handleSendEmail = () => {
     if (!name) {
-      alert("Please enter your name first!");
+      alert("Vennligst skriv inn navnet ditt først!");
       return;
     }
 
-    const subject = encodeURIComponent(`Math Dash Diploma - ${name}`);
+    const subject = encodeURIComponent(`Math Dash Diplom - ${name}`);
     
-    let body = `Student: ${name}\n`;
-    body += `Date: ${new Date().toLocaleDateString()}\n\n`;
-    body += `Total Stars: ${totalStars}\n`;
-    body += `Average Accuracy: ${avgAccuracy}%\n\n`;
-    body += `Level Breakdown:\n`;
+    let body = `Elev: ${name}\n`;
+    body += `Dato: ${new Date().toLocaleDateString()}\n\n`;
+    body += `Totalt antall stjerner: ${totalStars}\n`;
+    body += `Gjennomsnittlig nøyaktighet: ${avgAccuracy}%\n\n`;
+    body += `Oversikt over nivåer:\n`;
     
     LEVELS.forEach(level => {
       const p = progress[level.id];
       if (p) {
-        body += `Level ${level.id} (${level.name}): ${p.accuracy}% (${p.avgTime.toFixed(1)}s)\n`;
+        body += `Nivå ${level.id} (${level.name}): ${p.accuracy}% (${p.avgTime.toFixed(1)}s)\n`;
       } else {
-        body += `Level ${level.id}: Incomplete\n`;
+        body += `Nivå ${level.id}: Ikke fullført\n`;
       }
     });
 
@@ -86,28 +86,28 @@ export default function Diploma() {
       <div className="w-full max-w-4xl print:hidden mb-8 flex justify-between items-center">
         <Link href="/levels">
           <Button variant="ghost" className="gap-2">
-            <ArrowLeft className="w-4 h-4" /> Back to Levels
+            <ArrowLeft className="w-4 h-4" /> Tilbake til nivåer
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold text-slate-400">Diploma Preview</h1>
+        <h1 className="text-2xl font-bold text-slate-400">Diplom</h1>
       </div>
 
       <div className="w-full max-w-4xl space-y-8 print:space-y-0">
         {/* Input Section - Hidden on Print */}
         <Card className="p-6 print:hidden">
-          <label className="block text-sm font-medium mb-2">Enter Student Name for Diploma:</label>
+          <label className="block text-sm font-medium mb-2">Skriv inn elevens navn:</label>
           <div className="flex gap-4">
             <Input 
               value={name} 
               onChange={(e) => setName(e.target.value)} 
-              placeholder="Type your name here..."
+              placeholder="Skriv navnet ditt her..."
               className="text-lg"
             />
             <Button onClick={handleSendEmail} className="gap-2 bg-blue-600 hover:bg-blue-700">
-              <Send className="w-4 h-4" /> Send to Teacher
+              <Send className="w-4 h-4" /> Send til Lærer
             </Button>
             <Button onClick={handlePrint} variant="outline" className="gap-2">
-              <Printer className="w-4 h-4" /> Print
+              <Printer className="w-4 h-4" /> Skriv ut
             </Button>
           </div>
         </Card>
@@ -125,27 +125,27 @@ export default function Diploma() {
 
           <Award className="w-32 h-32 mx-auto text-yellow-500 mb-6 drop-shadow-md" />
           
-          <h1 className="text-6xl font-display font-bold text-slate-800 mb-4 uppercase tracking-wider">Diploma</h1>
-          <p className="text-2xl text-slate-500 italic mb-8 font-serif">of Mathematical Excellence</p>
+          <h1 className="text-6xl font-display font-bold text-slate-800 mb-4 uppercase tracking-wider">Diplom</h1>
+          <p className="text-2xl text-slate-500 italic mb-8 font-serif">for Matematisk Dyktighet</p>
           
-          <p className="text-xl text-slate-600 mb-2">This certifies that</p>
+          <p className="text-xl text-slate-600 mb-2">Dette bekrefter at</p>
           <div className="text-4xl font-display font-bold text-primary mb-8 border-b-2 border-slate-200 inline-block px-12 py-2 min-w-[300px]">
-            {name || "Student Name"}
+            {name || "Elevens Navn"}
           </div>
           
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Has successfully demonstrated mastery of addition and subtraction by completing all {totalLevels} levels of Math Dash with outstanding speed and accuracy.
+            Har fullført alle {totalLevels} nivåer i Math Dash med fremragende nøyaktighet og hurtighet.
           </p>
 
           <div className="grid grid-cols-2 gap-8 max-w-md mx-auto mb-12">
             <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-              <div className="text-sm text-slate-500 uppercase tracking-wide font-bold mb-1">Total Stars</div>
+              <div className="text-sm text-slate-500 uppercase tracking-wide font-bold mb-1">Totalt antall stjerner</div>
               <div className="text-3xl font-bold text-yellow-500 flex items-center justify-center gap-2">
                 <Star className="fill-current" /> {totalStars}
               </div>
             </div>
             <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-              <div className="text-sm text-slate-500 uppercase tracking-wide font-bold mb-1">Avg Accuracy</div>
+              <div className="text-sm text-slate-500 uppercase tracking-wide font-bold mb-1">Gjennomsnittlig nøyaktighet</div>
               <div className="text-3xl font-bold text-blue-600">
                 {avgAccuracy}%
               </div>
@@ -155,13 +155,13 @@ export default function Diploma() {
           <div className="mt-16 flex justify-between items-end px-12">
             <div className="text-center">
               <div className="w-48 border-b-2 border-slate-400 mb-2"></div>
-              <p className="text-slate-500 font-serif italic">Date</p>
+              <p className="text-slate-500 font-serif italic">Dato</p>
             </div>
             <div className="text-center">
               <div className="w-48 border-b-2 border-slate-400 mb-2">
                 <img src="/attached_assets/logo.png" className="h-12 mx-auto opacity-50 grayscale" alt="" />
               </div>
-              <p className="text-slate-500 font-serif italic">Math Dash Official</p>
+              <p className="text-slate-500 font-serif italic">Math Dash Offisiell</p>
             </div>
           </div>
         </div>
