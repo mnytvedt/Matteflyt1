@@ -126,8 +126,8 @@ export default function GameEngine({ level }: GameEngineProps) {
     const avgTime = results.reduce((acc, curr) => acc + curr.time, 0) / results.length;
     const isSuccess = accuracy >= level.passingScore;
     
-    // Save progress
-    saveProgress(level.id, accuracy);
+    // Save progress with speed
+    saveProgress(level.id, accuracy, avgTime);
 
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 animate-in zoom-in-95 duration-500">
