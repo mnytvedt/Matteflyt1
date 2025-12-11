@@ -8,6 +8,8 @@ import Home from "@/pages/Home";
 import LevelSelect from "@/pages/LevelSelect";
 import Play from "@/pages/Play";
 import Diploma from "@/pages/Diploma";
+import Admin from "@/pages/Admin";
+import AdminLogin from "@/pages/AdminLogin";
 
 function Router() {
   return (
@@ -16,6 +18,8 @@ function Router() {
       <Route path="/levels" component={LevelSelect} />
       <Route path="/play/:id" component={Play} />
       <Route path="/diploma" component={Diploma} />
+      <Route path="/admin-login" component={AdminLogin} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );

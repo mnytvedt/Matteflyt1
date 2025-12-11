@@ -46,8 +46,8 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number)
 }
 
 export function isLevelUnlocked(levelId: number): boolean {
-  // Only Level 1 is unlocked by default
-  if (levelId === 1) return true;
+  // Tutorial level (0) is unlocked by default
+  if (levelId === 0) return true;
   
   // Check if previous level was passed with >= 90% accuracy AND < 5s average time
   const progress = getProgress();
@@ -63,11 +63,8 @@ export function isLevelUnlocked(levelId: number): boolean {
 
 export function isAllLevelsCompleted(): boolean {
   const progress = getProgress();
-  // We have 11 levels. Check if level 11 is completed with passing grade.
-  // Actually, checking if all 11 have entries is safer.
-  // Or check if Level 11 is mastered?
-  // Let's check if all 11 levels exist in progress and have passing scores.
-  for (let i = 1; i <= 11; i++) {
+  // We have 21 levels (0-20). Check if all are completed with passing grade.
+  for (let i = 0; i <= 20; i++) {
     const p = progress[i];
     if (!p) return false;
     if (p.accuracy < 80) return false; // Minimum passing score

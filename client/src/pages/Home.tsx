@@ -66,10 +66,10 @@ export default function Home() {
           <Star className="w-4 h-4 text-accent fill-accent" />
           <span>Samle stjerner</span>
         </div>
-        <div className="flex items-center gap-2">
+        <Link href="/admin-login" className="flex items-center gap-2 hover:text-primary transition-colors">
           <Settings className="w-4 h-4" />
-          <span>v1.0.0</span>
-        </div>
+          <span>Admin</span>
+        </Link>
       </motion.div>
     </div>
   );

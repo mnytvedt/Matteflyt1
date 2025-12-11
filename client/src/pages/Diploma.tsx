@@ -26,31 +26,47 @@ export default function Diploma() {
     window.print();
   };
 
-  const handleSendEmail = () => {
+  const handleSendEmail = async () => {
     if (!name) {
       alert("Vennligst skriv inn navnet ditt først!");
       return;
     }
 
-    const subject = encodeURIComponent(`MatteFlyt Diplom - ${name}`);
-    
-    let body = `Elev: ${name}\n`;
-    body += `Dato: ${new Date().toLocaleDateString()}\n\n`;
-    body += `Totalt antall stjerner: ${totalStars}\n`;
-    body += `Gjennomsnittlig nøyaktighet: ${avgAccuracy}%\n\n`;
-    body += `Oversikt over nivåer:\n`;
-    
-    LEVELS.forEach(level => {
-      const p = progress[level.id];
-      if (p) {
-        body += `Nivå ${level.id} (${level.name}): ${p.accuracy}% (${p.avgTime.toFixed(1)}s)\n`;
-      } else {
-        body += `Nivå ${level.id}: Ikke fullført\n`;
-      }
-    });
+    try {
+      const levelResults: Record<number, { name: string; accuracy: number; time: number }> = {};
+      
+      LEVELS.forEach(level => {
+        const p = progress[level.id];
+        if (p) {
+          levelResults[level.id] = {
+            name: level.name,
+            accuracy: p.accuracy,
+            time: p.avgTime,
+          };
+        }
+      });
 
-    const mailtoLink = `mailto:morten.nytvedt@oslosskolen.no?subject=${subject}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+      const response = await fetch("/api/diplomas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentName: name,
+          totalStars,
+          avgAccuracy,
+          levelResults: JSON.stringify(levelResults),
+        }),
+      });
+
+      if (response.ok) {
+        alert(`✅ Diplom sendt! Kjempebra, ${name}! Lærer har fått resultatet ditt.`);
+        setName("");
+      } else {
+        alert("❌ Noe gikk galt ved sending. Prøv igjen.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("❌ Feil ved sending av diplom");
+    }
   };
 
   React.useEffect(() => {
@@ -103,7 +119,7 @@ export default function Diploma() {
               placeholder="Skriv navnet ditt her..."
               className="text-lg"
             />
-            <Button onClick={handleSendEmail} className="gap-2 bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleSendEmail} className="gap-2 bg-green-600 hover:bg-green-700">
               <Send className="w-4 h-4" /> Send til Lærer
             </Button>
             <Button onClick={handlePrint} variant="outline" className="gap-2">

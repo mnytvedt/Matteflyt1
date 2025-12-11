@@ -1,6 +1,7 @@
 export type Operator = 'add' | 'subtract';
 
 export type LevelType = 
+  | 'tutorial_buttons' // Tutorial: Learn the button interface
   | 'add_1_0_within_10'
   | 'sub_1_0_within_10'
   | 'add_5_x_within_10'
@@ -35,6 +36,17 @@ export interface LevelConfig {
 }
 
 export const LEVELS: LevelConfig[] = [
+  {
+    id: 0,
+    name: "Bli kjent med knappene",
+    description: "Lær deg å bruke knappene - trykk på tallene",
+    type: 'tutorial_buttons',
+    operator: 'add',
+    questionCount: 10,
+    timeLimitPerQuestion: 30,
+    passingScore: 100,
+    locked: false,
+  },
   {
     id: 1,
     name: "Addisjon +1, +0",
@@ -270,6 +282,14 @@ export const generateQuestion = (config: LevelConfig): Question => {
   let textPrompt: string | undefined;
 
   switch (config.type) {
+    case 'tutorial_buttons': {
+      // Tutorial: Handled specially in GameEngine.tsx with shuffled digits 0-9
+      num1 = 0;
+      num2 = 0;
+      answer = 0;
+      textPrompt = "Trykk på 0";
+      break;
+    }
     case 'add_1_0_within_10': {
       // +1 or +0. Sum <= 10.
       const isOne = Math.random() > 0.5;

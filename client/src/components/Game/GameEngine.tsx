@@ -22,12 +22,35 @@ export default function GameEngine({ level }: GameEngineProps) {
   const [currentInput, setCurrentInput] = useState("");
   const [score, setScore] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
-  const [results, setResults] = useState<{correct: boolean, time: number}[]>([]);
+  const [results, setResults] = useState<{correct: boolean, time: number, question: Question}[]>([]);
   const [feedback, setFeedback] = useState<'none' | 'correct' | 'incorrect'>('none');
 
   // Initialize questions
   useEffect(() => {
-    const newQuestions = Array.from({ length: level.questionCount }).map(() => generateQuestion(level));
+    let newQuestions: Question[];
+    
+    if (level.type === 'tutorial_buttons') {
+      // Tutorial: Create questions for digits 0-9 in shuffled order
+      const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      // Shuffle the digits
+      for (let i = digits.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [digits[i], digits[j]] = [digits[j], digits[i]];
+      }
+      
+      newQuestions = digits.map((digit, index) => ({
+        id: `tutorial_${index}`,
+        num1: digit,
+        num2: 0,
+        operator: 'add' as const,
+        answer: digit,
+        missingPosition: 'result' as const,
+        textPrompt: `${digit}`
+      }));
+    } else {
+      newQuestions = Array.from({ length: level.questionCount }).map(() => generateQuestion(level));
+    }
+    
     setQuestions(newQuestions);
     setStartTime(Date.now());
   }, [level]);
@@ -76,7 +99,7 @@ export default function GameEngine({ level }: GameEngineProps) {
 
     // Wait for animation then proceed
     setTimeout(() => {
-      setResults(prev => [...prev, { correct: isCorrect, time: timeTaken }]);
+      setResults(prev => [...prev, { correct: isCorrect, time: timeTaken, question: currentQuestion }]);
       setFeedback('none');
       setCurrentInput("");
       
@@ -153,6 +176,56 @@ export default function GameEngine({ level }: GameEngineProps) {
             <span className="text-3xl font-display font-bold text-orange-600">{avgTime.toFixed(1)}s</span>
           </Card>
         </div>
+
+        {/* Review section for incorrect answers */}
+        {results.filter(r => !r.correct).length > 0 && (
+          <div className="w-full max-w-2xl space-y-4">
+            <div className="border-t pt-6">
+              <h3 className="text-xl font-bold text-center mb-4">Øv på disse før neste runde</h3>
+              <div className="space-y-3">
+                {results.map((result, idx) => {
+                  if (result.correct) return null;
+                  const q = result.question;
+                  let questionText = '';
+                  let correctAnswer = '';
+
+                  if (q.textPrompt) {
+                    questionText = q.textPrompt;
+                  } else {
+                    // Build equation based on missing position
+                    if (q.missingPosition === 'num2') {
+                      questionText = `${q.num1} ${q.operator === 'add' ? '+' : '-'} ___ = ${q.answer}`;
+                      correctAnswer = q.num2.toString();
+                    } else {
+                      if (q.operator === 'add') {
+                        if (q.num3) {
+                          questionText = `${q.num1} + ${q.num2} + ${q.num3} = ___`;
+                          correctAnswer = q.answer.toString();
+                        } else {
+                          questionText = `${q.num1} + ${q.num2} = ___`;
+                          correctAnswer = q.answer.toString();
+                        }
+                      } else {
+                        questionText = `${q.num1} - ${q.num2} = ___`;
+                        correctAnswer = q.answer.toString();
+                      }
+                    }
+                  }
+
+                  return (
+                    <Card key={idx} className="p-4 bg-red-50/30 border-red-200 space-y-2">
+                      <p className="font-semibold text-foreground">{questionText}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">Riktig svar:</span>
+                        <span className="text-lg font-bold text-green-600 bg-green-100/50 px-3 py-1 rounded">{correctAnswer}</span>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-4">
           <Button variant="outline" size="lg" onClick={() => setLocation('/levels')} className="rounded-full">
