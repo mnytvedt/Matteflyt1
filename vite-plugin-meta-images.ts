@@ -56,15 +56,10 @@ export function metaImagesPlugin(): Plugin {
 }
 
 function getDeploymentUrl(): string | null {
-  if (process.env.REPLIT_INTERNAL_APP_DOMAIN) {
-    const url = `https://${process.env.REPLIT_INTERNAL_APP_DOMAIN}`;
-    log('[meta-images] using internal app domain:', url);
-    return url;
-  }
-
-  if (process.env.REPLIT_DEV_DOMAIN) {
-    const url = `https://${process.env.REPLIT_DEV_DOMAIN}`;
-    log('[meta-images] using dev domain:', url);
+  // Check for custom domain from environment
+  if (process.env.VITE_DEPLOYMENT_URL) {
+    const url = process.env.VITE_DEPLOYMENT_URL;
+    log('[meta-images] using custom deployment url:', url);
     return url;
   }
 
