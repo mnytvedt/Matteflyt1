@@ -5,6 +5,7 @@ import path from "path";
 import { metaImagesPlugin } from "./vite-plugin-meta-images";
 
 export default defineConfig({
+  base: process.env.GITHUB_PAGES ? "/Matteflyt1/" : "/",
   plugins: [react(), tailwindcss(), metaImagesPlugin()],
   resolve: {
     alias: {
