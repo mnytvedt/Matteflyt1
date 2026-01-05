@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Router as WouterRouter } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -11,17 +11,21 @@ import Diploma from "@/pages/Diploma";
 import Admin from "@/pages/Admin";
 import AdminLogin from "@/pages/AdminLogin";
 
+const base = import.meta.env.BASE_URL;
+
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/levels" component={LevelSelect} />
-      <Route path="/play/:id" component={Play} />
-      <Route path="/diploma" component={Diploma} />
-      <Route path="/admin-login" component={AdminLogin} />
-      <Route path="/admin" component={Admin} />
-      <Route component={NotFound} />
-    </Switch>
+    <WouterRouter base={base}>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/levels" component={LevelSelect} />
+        <Route path="/play/:id" component={Play} />
+        <Route path="/diploma" component={Diploma} />
+        <Route path="/admin-login" component={AdminLogin} />
+        <Route path="/admin" component={Admin} />
+        <Route component={NotFound} />
+      </Switch>
+    </WouterRouter>
   );
 }
 
