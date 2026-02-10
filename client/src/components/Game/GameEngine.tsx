@@ -57,7 +57,9 @@ export default function GameEngine({ level }: GameEngineProps) {
 
   const handleInput = (num: number) => {
     if (feedback !== 'none') return; // Block input during feedback
-    if (currentInput.length >= 2) return; // Limit to 2 digits
+    // Allow up to 3 digits for multiplication (e.g., 10 × 10 = 100)
+    const maxDigits = level.operator === 'multiply' ? 3 : 2;
+    if (currentInput.length >= maxDigits) return;
     setCurrentInput(prev => prev + num.toString());
   };
 
@@ -193,8 +195,9 @@ export default function GameEngine({ level }: GameEngineProps) {
                     questionText = q.textPrompt;
                   } else {
                     // Build equation based on missing position
+                    const opSymbol = q.operator === 'add' ? '+' : q.operator === 'subtract' ? '-' : '×';
                     if (q.missingPosition === 'num2') {
-                      questionText = `${q.num1} ${q.operator === 'add' ? '+' : '-'} ___ = ${q.answer}`;
+                      questionText = `${q.num1} ${opSymbol} ___ = ${q.answer}`;
                       correctAnswer = q.num2.toString();
                     } else {
                       if (q.operator === 'add') {
@@ -205,8 +208,11 @@ export default function GameEngine({ level }: GameEngineProps) {
                           questionText = `${q.num1} + ${q.num2} = ___`;
                           correctAnswer = q.answer.toString();
                         }
-                      } else {
+                      } else if (q.operator === 'subtract') {
                         questionText = `${q.num1} - ${q.num2} = ___`;
+                        correctAnswer = q.answer.toString();
+                      } else {
+                        questionText = `${q.num1} × ${q.num2} = ___`;
                         correctAnswer = q.answer.toString();
                       }
                     }
@@ -293,7 +299,10 @@ export default function GameEngine({ level }: GameEngineProps) {
                 <span>{currentQuestion.num1}</span>
                 
                 {/* Operator */}
-                <span className="text-primary">{currentQuestion.operator === 'add' ? '+' : '-'}</span>
+                <span className="text-primary">
+                  {currentQuestion.operator === 'add' ? '+' : 
+                   currentQuestion.operator === 'subtract' ? '-' : '×'}
+                </span>
                 
                 {/* Second Number or Input */}
                 {currentQuestion.missingPosition === 'num2' ? (

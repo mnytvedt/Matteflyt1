@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowLeft, Lock, Star, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LEVELS, LevelConfig } from "@/lib/levels";
+import { LEVELS, LevelConfig, Category } from "@/lib/levels";
 import { getProgress, isLevelUnlocked, isAllLevelsCompleted, LevelProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
 export default function LevelSelect() {
+  const [location] = useLocation();
+  const params = new URLSearchParams(location.split('?')[1] || '');
+  const category = (params.get('category') || 'addition_subtraction') as Category;
+  
   // Force re-render on mount to get latest localstorage
   const [progress, setProgress] = useState<Record<number, LevelProgress>>({});
   const [allCompleted, setAllCompleted] = useState(false);
@@ -16,6 +20,11 @@ export default function LevelSelect() {
     setProgress(getProgress());
     setAllCompleted(isAllLevelsCompleted());
   }, []);
+
+  // Filter levels by category
+  const filteredLevels = LEVELS.filter(level => level.category === category);
+
+  const categoryTitle = category === 'multiplication' ? 'Multiplikasjon' : 'Addisjon & Subtraksjon';
 
   return (
     <div className="min-h-screen p-4 sm:p-8 pb-24">
@@ -27,7 +36,10 @@ export default function LevelSelect() {
                 <ArrowLeft className="w-6 h-6" />
               </Button>
             </Link>
-            <h1 className="text-4xl font-display font-bold text-foreground">Velg Nivå</h1>
+            <div>
+              <h1 className="text-4xl font-display font-bold text-foreground">{categoryTitle}</h1>
+              <p className="text-sm text-muted-foreground mt-1">Velg nivå</p>
+            </div>
           </div>
           
           {allCompleted && (
@@ -41,7 +53,7 @@ export default function LevelSelect() {
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {LEVELS.map((level, index) => {
+          {filteredLevels.map((level, index) => {
             const unlocked = isLevelUnlocked(level.id);
             const levelData = progress[level.id];
             const stars = levelData ? levelData.stars : 0;
@@ -80,7 +92,7 @@ function LevelCard({ level, index, locked, stars }: { level: LevelConfig; index:
             <span className={cn(
               "w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-display font-bold text-white shadow-lg",
               level.operator === 'add' ? "bg-blue-500" : 
-              level.operator === 'subtract' ? "bg-pink-500" : "bg-purple-500"
+              level.operator === 'subtract' ? "bg-pink-500" : "bg-purple-600"
             )}>
               {level.id}
             </span>

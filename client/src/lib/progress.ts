@@ -46,8 +46,19 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number)
 }
 
 export function isLevelUnlocked(levelId: number): boolean {
-  // Tutorial level (0) is unlocked by default
+  // Tutorial levels (0 and 20) are unlocked by default
   if (levelId === 0) return true;
+  
+  // Multiplication tutorial (level 20) requires all addition/subtraction levels completed
+  if (levelId === 20) {
+    const progress = getProgress();
+    // Check levels 0-19 (all addition/subtraction levels)
+    for (let i = 0; i <= 19; i++) {
+      const p = progress[i];
+      if (!p || p.accuracy < 80) return false; // Minimum passing score
+    }
+    return true;
+  }
   
   // Check if previous level was passed with >= 90% accuracy AND < 5s average time
   const progress = getProgress();

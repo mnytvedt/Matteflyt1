@@ -1,4 +1,6 @@
-export type Operator = 'add' | 'subtract';
+export type Operator = 'add' | 'subtract' | 'multiply';
+
+export type Category = 'addition_subtraction' | 'multiplication';
 
 export type LevelType = 
   | 'tutorial_buttons' // Tutorial: Learn the button interface
@@ -21,7 +23,17 @@ export type LevelType =
   | 'double_text_1_5' // Dobbelt av 3 er... (1-5)
   | 'double_text_6_10' // Dobbelt av 6 er... (6-10)
   | 'half_text' // Halvparten av 8 er...
-  | 'add_9_x'; // 9+x
+  | 'add_9_x' // 9+x
+  // Multiplication levels
+  | 'mult_tutorial' // Tutorial for multiplication
+  | 'mult_1_0_table' // 1- og 0-gangeren
+  | 'mult_2_table_0_5' // 2-gangeren 0-5
+  | 'mult_2_table_6_10' // 2-gangeren 6-10
+  | 'mult_10_table' // 10-gangeren
+  | 'mult_5_table_0_5' // 5-gangeren 0-5
+  | 'mult_5_table_6_10' // 5-gangeren 6-10
+  | 'mult_4_table_0_5' // 4-gangeren 0-5
+  | 'mult_3_table_0_5'; // 3-gangeren 0-5
 
 export interface LevelConfig {
   id: number;
@@ -29,6 +41,7 @@ export interface LevelConfig {
   description: string;
   type: LevelType;
   operator: Operator; // Main operator for UI color/icon
+  category: Category; // Which subject area (addition/subtraction or multiplication)
   questionCount: number;
   timeLimitPerQuestion: number;
   passingScore: number;
@@ -42,6 +55,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Lær deg å bruke knappene - trykk på tallene",
     type: 'tutorial_buttons',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 30,
     passingScore: 100,
@@ -53,6 +67,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Pluss 1 og 0 med tall opp til 10",
     type: 'add_1_0_within_10',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -64,6 +79,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Minus 1, 0 og 'alt' opp til 10",
     type: 'sub_1_0_within_10',
     operator: 'subtract',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -75,6 +91,7 @@ export const LEVELS: LevelConfig[] = [
     description: "5 + tall opp til 10",
     type: 'add_5_x_within_10',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -86,6 +103,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Doblinger opp til 10 (eks 2+2)",
     type: 'doubles_within_10',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -97,6 +115,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Pluss 2 med tall opp til 10",
     type: 'add_2_within_10',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -108,6 +127,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Minus 2 med tall opp til 10",
     type: 'sub_2_within_10',
     operator: 'subtract',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -119,6 +139,7 @@ export const LEVELS: LevelConfig[] = [
     description: "5 minus tall",
     type: 'sub_5_x',
     operator: 'subtract',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -130,6 +151,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Subtraksjon hvor svaret blir 1 eller 2",
     type: 'sub_result_1_2',
     operator: 'subtract',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -141,6 +163,7 @@ export const LEVELS: LevelConfig[] = [
     description: "10 minus tall",
     type: 'sub_10_x',
     operator: 'subtract',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -152,6 +175,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Hva må du legge til for å få 5?",
     type: 'bonds_5',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -163,6 +187,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Hva må du legge til for å få 10?",
     type: 'bonds_10',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -175,6 +200,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Regn ut med tre tall (f.eks 6+5+5)",
     type: 'add_three_numbers_bridging',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 12,
     passingScore: 80,
@@ -186,6 +212,7 @@ export const LEVELS: LevelConfig[] = [
     description: "10 pluss et ensifret tall",
     type: 'add_10_x',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 8,
     passingScore: 80,
@@ -197,6 +224,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Doble tall fra 6 til 10",
     type: 'doubles_within_20',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -208,6 +236,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Hva mangler for å få 20?",
     type: 'bonds_20',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -219,6 +248,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Dobbelt av et tall (1-5)",
     type: 'double_text_1_5',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -230,6 +260,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Dobbelt av et tall (6-10)",
     type: 'double_text_6_10',
     operator: 'add',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -241,6 +272,7 @@ export const LEVELS: LevelConfig[] = [
     description: "Halvparten av et partall",
     type: 'half_text',
     operator: 'subtract',
+    category: 'addition_subtraction',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -252,6 +284,116 @@ export const LEVELS: LevelConfig[] = [
     description: "9 pluss et ensifret tall",
     type: 'add_9_x',
     operator: 'add',
+    category: 'addition_subtraction',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  // Multiplication Levels
+  {
+    id: 20,
+    name: "Bli kjent med multiplikasjon",
+    description: "Lær gangestykker - trykk på svaret",
+    type: 'mult_tutorial',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 30,
+    passingScore: 100,
+    locked: false,
+  },
+  {
+    id: 21,
+    name: "1- og 0-gangeren",
+    description: "Gange med 1 og 0",
+    type: 'mult_1_0_table',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 8,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 22,
+    name: "2-gangeren (0-5)",
+    description: "2 × 0 til 2 × 5",
+    type: 'mult_2_table_0_5',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 23,
+    name: "2-gangeren (6-10)",
+    description: "2 × 6 til 2 × 10",
+    type: 'mult_2_table_6_10',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 24,
+    name: "10-gangeren",
+    description: "Gangetabellen for 10",
+    type: 'mult_10_table',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 8,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 25,
+    name: "5-gangeren (0-5)",
+    description: "5 × 0 til 5 × 5",
+    type: 'mult_5_table_0_5',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 26,
+    name: "5-gangeren (6-10)",
+    description: "5 × 6 til 5 × 10",
+    type: 'mult_5_table_6_10',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 27,
+    name: "4-gangeren (0-5)",
+    description: "4 × 0 til 4 × 5",
+    type: 'mult_4_table_0_5',
+    operator: 'multiply',
+    category: 'multiplication',
+    questionCount: 10,
+    timeLimitPerQuestion: 10,
+    passingScore: 80,
+    locked: false,
+  },
+  {
+    id: 28,
+    name: "3-gangeren (0-5)",
+    description: "3 × 0 til 3 × 5",
+    type: 'mult_3_table_0_5',
+    operator: 'multiply',
+    category: 'multiplication',
     questionCount: 10,
     timeLimitPerQuestion: 10,
     passingScore: 80,
@@ -467,6 +609,83 @@ export const generateQuestion = (config: LevelConfig): Question => {
       num1 = 9;
       num2 = randomInt(0, 9);
       answer = num1 + num2;
+      break;
+    }
+    // Multiplication cases
+    case 'mult_tutorial': {
+      // Tutorial: Simple multiplication facts
+      const tables = [1, 2, 5, 10];
+      const table = tables[randomInt(0, tables.length - 1)];
+      const multiplier = randomInt(0, 10);
+      num1 = table;
+      num2 = multiplier;
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_1_0_table': {
+      // 1- og 0-gangeren (combined 1 and 0)
+      const table = Math.random() > 0.5 ? 1 : 0;
+      num1 = table;
+      num2 = randomInt(0, 10);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_2_table_0_5': {
+      // 2 × 0 to 2 × 5
+      num1 = 2;
+      num2 = randomInt(0, 5);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_2_table_6_10': {
+      // 2 × 6 to 2 × 10
+      num1 = 2;
+      num2 = randomInt(6, 10);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_10_table': {
+      // 10 × x
+      num1 = 10;
+      num2 = randomInt(0, 10);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_5_table_0_5': {
+      // 5 × 0 to 5 × 5
+      num1 = 5;
+      num2 = randomInt(0, 5);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_5_table_6_10': {
+      // 5 × 6 to 5 × 10
+      num1 = 5;
+      num2 = randomInt(6, 10);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_4_table_0_5': {
+      // 4 × 0 to 4 × 5
+      num1 = 4;
+      num2 = randomInt(0, 5);
+      answer = num1 * num2;
+      operator = 'multiply';
+      break;
+    }
+    case 'mult_3_table_0_5': {
+      // 3 × 0 to 3 × 5
+      num1 = 3;
+      num2 = randomInt(0, 5);
+      answer = num1 * num2;
+      operator = 'multiply';
       break;
     }
   }
