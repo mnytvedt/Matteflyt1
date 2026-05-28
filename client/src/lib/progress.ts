@@ -1,12 +1,14 @@
 // Progress management
-import { LEVELS } from "@/lib/levels";
+import { LEVELS, type LevelConfig } from "@/lib/levels";
 
 export interface LevelProgress {
   levelId: number;
   accuracy: number;
-  avgTime: number; // New field for speed
+  avgTime: number;
+  maxTime: number;
   unlocked: boolean;
   stars: number;
+  mastered: boolean;
 }
 
 const STORAGE_KEY = 'math-dash-progress';
@@ -20,28 +22,58 @@ export function getProgress(): Record<number, LevelProgress> {
   }
 }
 
-export function saveProgress(levelId: number, accuracy: number, avgTime: number) {
-  const current = getProgress();
-  
-  // 3 stars: >90% accuracy AND <5s speed
-  // 2 stars: >80% accuracy
-  // 1 star: >60% accuracy
-  let stars = 0;
-  if (accuracy >= 90 && avgTime < 5) stars = 3;
-  else if (accuracy >= 80) stars = 2;
-  else if (accuracy >= 60) stars = 1;
+function getLevel(levelId: number): LevelConfig | undefined {
+  return LEVELS.find((entry) => entry.id === levelId);
+}
 
-  // Only update if better (prioritizing stars, then accuracy)
+function isLevelMastered(progress: Partial<LevelProgress> | undefined, level: LevelConfig): boolean {
+  if (!progress) return false;
+
+  if (typeof progress.mastered === 'boolean') return progress.mastered;
+
+  if (typeof progress.maxTime !== 'number') return false;
+
+  return progress.accuracy === level.passingScore && progress.maxTime < level.timeLimitPerQuestion;
+}
+
+export function hasMasteredLevel(levelId: number, progress = getProgress()): boolean {
+  const level = getLevel(levelId);
+
+  if (!level) return false;
+
+  return isLevelMastered(progress[levelId], level);
+}
+
+export function saveProgress(levelId: number, accuracy: number, avgTime: number, maxTime: number) {
+  const current = getProgress();
+
+  const level = getLevel(levelId);
+
+  if (!level) return;
+
+  const mastered = accuracy === level.passingScore && maxTime < level.timeLimitPerQuestion;
+
+  let stars = 0;
+  if (mastered) stars = 3;
+  else if (accuracy === level.passingScore) stars = 2;
+  else if (accuracy >= 80) stars = 1;
+
   const currentProgress = current[levelId];
-  const isBetter = !currentProgress || stars > currentProgress.stars || (stars === currentProgress.stars && accuracy > currentProgress.accuracy);
+  const isBetter =
+    !currentProgress ||
+    stars > currentProgress.stars ||
+    (stars === currentProgress.stars && accuracy > currentProgress.accuracy) ||
+    (stars === currentProgress.stars && accuracy === currentProgress.accuracy && avgTime < currentProgress.avgTime);
 
   if (isBetter) {
     current[levelId] = {
       levelId,
       accuracy,
       avgTime,
+      maxTime,
       unlocked: true,
-      stars
+      stars,
+      mastered,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
   }
@@ -49,34 +81,25 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number)
 
 export function isLevelUnlocked(levelId: number): boolean {
   const progress = getProgress();
-  const level = LEVELS.find((entry) => entry.id === levelId);
+  const level = getLevel(levelId);
 
   if (!level) return false;
 
-  if (levelId === 0) return true;
+  const categoryLevels = LEVELS.filter((entry) => entry.category === level.category);
+  const currentIndex = categoryLevels.findIndex((entry) => entry.id === levelId);
 
-  if (level.category === 'multiplication' && levelId === 20) {
-    return LEVELS
-      .filter((entry) => entry.category === 'addition_subtraction')
-      .every((entry) => {
-        const savedLevel = progress[entry.id];
-        return savedLevel && savedLevel.accuracy >= entry.passingScore;
-      });
-  }
+  if (currentIndex === -1) return false;
 
-  const previousLevelConfig = LEVELS.find((entry) => entry.id === levelId - 1);
-  const previousLevelProgress = progress[levelId - 1];
+  // First level in each category is always unlocked.
+  if (currentIndex === 0) return true;
 
-  if (!previousLevelConfig || !previousLevelProgress) return false;
+  const previousLevelInCategory = categoryLevels[currentIndex - 1];
 
-  return previousLevelProgress.accuracy >= previousLevelConfig.passingScore;
+  return isLevelMastered(progress[previousLevelInCategory.id], previousLevelInCategory);
 }
 
 export function isAllLevelsCompleted(): boolean {
   const progress = getProgress();
 
-  return LEVELS.every((level) => {
-    const savedLevel = progress[level.id];
-    return savedLevel && savedLevel.accuracy >= level.passingScore;
-  });
+  return LEVELS.every((level) => isLevelMastered(progress[level.id], level));
 }

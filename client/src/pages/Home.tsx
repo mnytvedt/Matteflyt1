@@ -1,35 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { Plus, Minus, X as Multiply, Star, Trophy, Settings, Lock } from "lucide-react";
+import { Plus, Minus, X as Multiply, Star, Trophy, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { LEVELS } from "@/lib/levels";
-import { getProgress } from "@/lib/progress";
 import heroImage from "@assets/generated_images/colorful_3d_math_symbols_floating_playfully.png";
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const [multiplicationUnlocked, setMultiplicationUnlocked] = useState(false);
-
-  useEffect(() => {
-    // Check if all addition/subtraction levels are completed
-    const progress = getProgress();
-    const addSubLevels = LEVELS.filter(l => l.category === 'addition_subtraction');
-    
-    const allCompleted = addSubLevels.every(level => {
-      const p = progress[level.id];
-      return p && p.accuracy >= level.passingScore;
-    });
-    
-    setMultiplicationUnlocked(allCompleted);
-  }, []);
-
-  const handleMultiplicationClick = () => {
-    if (multiplicationUnlocked) {
-      setLocation('/levels?category=multiplication');
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -98,61 +76,20 @@ export default function Home() {
             transition={{ delay: 0.5 }}
           >
             <Card 
-              className={`p-8 transition-all duration-300 border-2 relative ${
-                multiplicationUnlocked 
-                  ? 'cursor-pointer hover:shadow-2xl hover:border-purple-500/50 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 group'
-                  : 'cursor-not-allowed bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/20 dark:to-gray-800/20 border-gray-300 opacity-70'
-              }`}
-              onClick={handleMultiplicationClick}
+              className="p-8 transition-all duration-300 border-2 cursor-pointer hover:shadow-2xl hover:border-purple-500/50 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 group"
+              onClick={() => setLocation('/levels?category=multiplication')}
             >
-              {/* Lock Overlay */}
-              {!multiplicationUnlocked && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg backdrop-blur-[1px]">
-                  <div className="bg-white dark:bg-gray-800 rounded-full p-4 shadow-xl">
-                    <Lock className="w-8 h-8 text-gray-400" />
-                  </div>
-                </div>
-              )}
-              
               <div className="flex items-center justify-center gap-3 mb-4">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-transform ${
-                  multiplicationUnlocked 
-                    ? 'bg-purple-500/10 group-hover:scale-110' 
-                    : 'bg-gray-400/10'
-                }`}>
-                  <Multiply className={`w-8 h-8 ${
-                    multiplicationUnlocked 
-                      ? 'text-purple-600 dark:text-purple-400' 
-                      : 'text-gray-400'
-                  }`} />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center transition-transform bg-purple-500/10 group-hover:scale-110">
+                  <Multiply className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-              <h2 className={`text-2xl font-display font-bold mb-2 ${
-                multiplicationUnlocked 
-                  ? 'text-purple-600 dark:text-purple-400' 
-                  : 'text-gray-400'
-              }`}>
+              <h2 className="text-2xl font-display font-bold mb-2 text-purple-600 dark:text-purple-400">
                 Multiplikasjon
               </h2>
-              <p className={`mb-4 ${
-                multiplicationUnlocked 
-                  ? 'text-muted-foreground' 
-                  : 'text-gray-400'
-              }`}>
-                {multiplicationUnlocked 
-                  ? 'Gangetabellene 1-10' 
-                  : 'Fullfør alle addisjon/subtraksjonsnivåer først'}
-              </p>
-              <Button 
-                className={`w-full ${
-                  multiplicationUnlocked 
-                    ? 'bg-purple-600 hover:bg-purple-700' 
-                    : 'bg-gray-400 cursor-not-allowed'
-                }`} 
-                size="lg"
-                disabled={!multiplicationUnlocked}
-              >
-                {multiplicationUnlocked ? 'Start Øving' : 'Låst'}
+              <p className="mb-4 text-muted-foreground">Gangetabellene 1-10</p>
+              <Button className="w-full bg-purple-600 hover:bg-purple-700" size="lg">
+                Start Øving
               </Button>
             </Card>
           </motion.div>
