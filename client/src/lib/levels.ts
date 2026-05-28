@@ -48,7 +48,10 @@ export interface LevelConfig {
   locked?: boolean;
 }
 
-export const LEVELS: LevelConfig[] = [
+export const MASTERY_PASSING_SCORE = 100;
+export const MASTERY_TIME_LIMIT_SECONDS = 5;
+
+const LEVEL_DEFINITIONS: LevelConfig[] = [
   {
     id: 0,
     name: "Bli kjent med knappene",
@@ -293,9 +296,9 @@ export const LEVELS: LevelConfig[] = [
   // Multiplication Levels
   {
     id: 20,
-    name: "Bli kjent med multiplikasjon",
-    description: "Lær gangestykker - trykk på svaret",
-    type: 'mult_tutorial',
+    name: "Bli kjent med knappene",
+    description: "Lær deg å bruke knappene - trykk på tallene",
+    type: 'tutorial_buttons',
     operator: 'multiply',
     category: 'multiplication',
     questionCount: 10,
@@ -400,6 +403,12 @@ export const LEVELS: LevelConfig[] = [
     locked: false,
   }
 ];
+
+export const LEVELS: LevelConfig[] = LEVEL_DEFINITIONS.map((level) => ({
+  ...level,
+  timeLimitPerQuestion: MASTERY_TIME_LIMIT_SECONDS,
+  passingScore: MASTERY_PASSING_SCORE,
+}));
 
 export interface Question {
   id: string;

@@ -76,6 +76,8 @@ export default function LevelSelect() {
 }
 
 function LevelCard({ level, index, locked, stars }: { level: LevelConfig; index: number; locked: boolean; stars: number }) {
+  const displayLevelNumber = level.category === 'multiplication' ? index + 1 : level.id;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -95,7 +97,7 @@ function LevelCard({ level, index, locked, stars }: { level: LevelConfig; index:
               level.operator === 'add' ? "bg-blue-500" : 
               level.operator === 'subtract' ? "bg-pink-500" : "bg-purple-600"
             )}>
-              {level.id}
+              {displayLevelNumber}
             </span>
             {locked ? (
               <Lock className="w-6 h-6 text-muted-foreground" />
