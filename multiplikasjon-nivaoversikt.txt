@@ -1,0 +1,70 @@
+Oversikt over multiplikasjonsnivaene i MatteFlyt
+
+Kategori: Multiplikasjon
+Antall nivaer: 9
+Nivaaer: 20-28
+
+Nivaa 20
+Navn: Bli kjent med multiplikasjon
+Beskrivelse: Laer gangestykker - trykk pa svaret
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 30 sekunder
+Bestattkrav: 100 %
+
+Nivaa 21
+Navn: 1- og 0-gangeren
+Beskrivelse: Gange med 1 og 0
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 8 sekunder
+Bestattkrav: 80 %
+
+Nivaa 22
+Navn: 2-gangeren (0-5)
+Beskrivelse: 2 x 0 til 2 x 5
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 23
+Navn: 2-gangeren (6-10)
+Beskrivelse: 2 x 6 til 2 x 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 24
+Navn: 10-gangeren
+Beskrivelse: Gangetabellen for 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 8 sekunder
+Bestattkrav: 80 %
+
+Nivaa 25
+Navn: 5-gangeren (0-5)
+Beskrivelse: 5 x 0 til 5 x 5
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 26
+Navn: 5-gangeren (6-10)
+Beskrivelse: 5 x 6 til 5 x 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 27
+Navn: 4-gangeren (0-5)
+Beskrivelse: 4 x 0 til 4 x 5
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 28
+Navn: 3-gangeren (0-5)
+Beskrivelse: 3 x 0 til 3 x 5
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Kilde: client/src/lib/levels.ts

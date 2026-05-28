@@ -1,4 +1,6 @@
 // Progress management
+import { LEVELS } from "@/lib/levels";
+
 export interface LevelProgress {
   levelId: number;
   accuracy: number;
@@ -46,39 +48,35 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number)
 }
 
 export function isLevelUnlocked(levelId: number): boolean {
-  // Tutorial levels (0 and 20) are unlocked by default
-  if (levelId === 0) return true;
-  
-  // Multiplication tutorial (level 20) requires all addition/subtraction levels completed
-  if (levelId === 20) {
-    const progress = getProgress();
-    // Check levels 0-19 (all addition/subtraction levels)
-    for (let i = 0; i <= 19; i++) {
-      const p = progress[i];
-      if (!p || p.accuracy < 80) return false; // Minimum passing score
-    }
-    return true;
-  }
-  
-  // Check if previous level was passed with >= 90% accuracy AND < 5s average time
   const progress = getProgress();
-  const prevLevel = progress[levelId - 1];
-  
-  if (!prevLevel) return false;
+  const level = LEVELS.find((entry) => entry.id === levelId);
 
-  const passedAccuracy = prevLevel.accuracy >= 90;
-  const passedSpeed = prevLevel.avgTime !== undefined && prevLevel.avgTime < 5;
+  if (!level) return false;
 
-  return passedAccuracy && passedSpeed;
+  if (levelId === 0) return true;
+
+  if (level.category === 'multiplication' && levelId === 20) {
+    return LEVELS
+      .filter((entry) => entry.category === 'addition_subtraction')
+      .every((entry) => {
+        const savedLevel = progress[entry.id];
+        return savedLevel && savedLevel.accuracy >= entry.passingScore;
+      });
+  }
+
+  const previousLevelConfig = LEVELS.find((entry) => entry.id === levelId - 1);
+  const previousLevelProgress = progress[levelId - 1];
+
+  if (!previousLevelConfig || !previousLevelProgress) return false;
+
+  return previousLevelProgress.accuracy >= previousLevelConfig.passingScore;
 }
 
 export function isAllLevelsCompleted(): boolean {
   const progress = getProgress();
-  // We have 21 levels (0-20). Check if all are completed with passing grade.
-  for (let i = 0; i <= 20; i++) {
-    const p = progress[i];
-    if (!p) return false;
-    if (p.accuracy < 80) return false; // Minimum passing score
-  }
-  return true;
+
+  return LEVELS.every((level) => {
+    const savedLevel = progress[level.id];
+    return savedLevel && savedLevel.accuracy >= level.passingScore;
+  });
 }

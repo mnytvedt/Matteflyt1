@@ -14,13 +14,14 @@ export default function Play() {
   
   const levelId = parseInt(params.id);
   const level = LEVELS.find(l => l.id === levelId);
+  const levelSelectHref = level ? `/levels?category=${level.category}` : '/levels';
   
   if (!level) return <NotFound />;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col p-4">
       <header className="w-full max-w-4xl mx-auto flex items-center mb-4">
-        <Link href="/levels">
+        <Link href={levelSelectHref}>
           <Button variant="ghost" size="icon" className="rounded-full">
             <ArrowLeft className="w-6 h-6" />
           </Button>

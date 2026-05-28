@@ -1,0 +1,147 @@
+Oversikt over nivaene i addisjon og subtraksjon i MatteFlyt
+
+Kategori: Addisjon og subtraksjon
+Antall nivaer: 20
+Nivaaer: 0-19
+
+Nivaa 0
+Navn: Bli kjent med knappene
+Beskrivelse: Laer deg a bruke knappene - trykk pa tallene
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 30 sekunder
+Bestattkrav: 100 %
+
+Nivaa 1
+Navn: Addisjon +1, +0
+Beskrivelse: Pluss 1 og 0 med tall opp til 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 2
+Navn: Subtraksjon -1, -0
+Beskrivelse: Minus 1, 0 og 'alt' opp til 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 3
+Navn: Addisjon med 5
+Beskrivelse: 5 + tall opp til 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 4
+Navn: Doblinger
+Beskrivelse: Doblinger opp til 10 (eks 2+2)
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 5
+Navn: Addisjon +2
+Beskrivelse: Pluss 2 med tall opp til 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 6
+Navn: Subtraksjon -2
+Beskrivelse: Minus 2 med tall opp til 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 7
+Navn: Subtraksjon fra 5
+Beskrivelse: 5 minus tall
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 8
+Navn: Nesten Alt
+Beskrivelse: Subtraksjon hvor svaret blir 1 eller 2
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 9
+Navn: Subtraksjon fra 10
+Beskrivelse: 10 minus tall
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 10
+Navn: Tallvenner til 5
+Beskrivelse: Hva ma du legge til for a fa 5?
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 11
+Navn: Tallvenner til 10
+Beskrivelse: Hva ma du legge til for a fa 10?
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 12
+Navn: Tiervenn og litt til
+Beskrivelse: Regn ut med tre tall (f.eks 6+5+5)
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 12 sekunder
+Bestattkrav: 80 %
+
+Nivaa 13
+Navn: 10 + x
+Beskrivelse: 10 pluss et ensifret tall
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 8 sekunder
+Bestattkrav: 80 %
+
+Nivaa 14
+Navn: Doblinger til 20
+Beskrivelse: Doble tall fra 6 til 10
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 15
+Navn: Tiervenner til 20
+Beskrivelse: Hva mangler for a fa 20?
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 16
+Navn: Doble (1-5)
+Beskrivelse: Dobbelt av et tall (1-5)
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 17
+Navn: Doble (6-10)
+Beskrivelse: Dobbelt av et tall (6-10)
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 18
+Navn: Halvparten
+Beskrivelse: Halvparten av et partall
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Nivaa 19
+Navn: 9 + x
+Beskrivelse: 9 pluss et ensifret tall
+Antall sporsmal: 10
+Tidsgrense per sporsmal: 10 sekunder
+Bestattkrav: 80 %
+
+Kilde: client/src/lib/levels.ts

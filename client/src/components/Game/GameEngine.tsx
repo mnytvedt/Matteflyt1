@@ -234,7 +234,12 @@ export default function GameEngine({ level }: GameEngineProps) {
         )}
 
         <div className="flex gap-4">
-          <Button variant="outline" size="lg" onClick={() => setLocation('/levels')} className="rounded-full">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => setLocation(`/levels?category=${level.category}`)}
+            className="rounded-full"
+          >
             <Home className="mr-2 w-5 h-5" /> Nivåer
           </Button>
           <Button size="lg" onClick={() => window.location.reload()} className="rounded-full bg-primary hover:bg-primary/90">
