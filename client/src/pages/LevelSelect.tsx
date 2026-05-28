@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "wouter";
+import { Link, useSearch } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowLeft, Lock, Star, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,10 @@ import { getProgress, isLevelUnlocked, isAllLevelsCompleted, LevelProgress } fro
 import { cn } from "@/lib/utils";
 
 export default function LevelSelect() {
-  const [location] = useLocation();
-  const params = new URLSearchParams(location.split('?')[1] || '');
-  const category = (params.get('category') || 'addition_subtraction') as Category;
+  const search = useSearch();
+  const params = new URLSearchParams(search);
+  const rawCategory = params.get('category');
+  const category: Category = rawCategory === 'multiplication' ? 'multiplication' : 'addition_subtraction';
   
   // Force re-render on mount to get latest localstorage
   const [progress, setProgress] = useState<Record<number, LevelProgress>>({});
