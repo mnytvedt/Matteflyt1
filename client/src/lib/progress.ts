@@ -11,12 +11,52 @@ export interface LevelProgress {
   mastered: boolean;
 }
 
-const STORAGE_KEY = 'math-dash-progress';
+const STORAGE_KEY_PREFIX = 'math-dash-progress';
+const LEGACY_STORAGE_KEY = 'math-dash-progress';
+const PROFILE_KEY = 'math-dash-current-profile';
+const DEFAULT_PROFILE_CODE = '0000';
+
+function normalizeProfileCode(code: string | null | undefined): string {
+  const digits = (code ?? '').replace(/\D/g, '').slice(0, 4);
+  return digits.padStart(4, '0') || DEFAULT_PROFILE_CODE;
+}
+
+export function getCurrentProfileCode(): string {
+  try {
+    return normalizeProfileCode(localStorage.getItem(PROFILE_KEY));
+  } catch {
+    return DEFAULT_PROFILE_CODE;
+  }
+}
+
+export function setCurrentProfileCode(code: string) {
+  try {
+    localStorage.setItem(PROFILE_KEY, normalizeProfileCode(code));
+  } catch {
+    // Ignore storage errors in private mode / restricted browsers.
+  }
+}
+
+function getStorageKey(profileCode = getCurrentProfileCode()): string {
+  return `${STORAGE_KEY_PREFIX}:${normalizeProfileCode(profileCode)}`;
+}
 
 export function getProgress(): Record<number, LevelProgress> {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : {};
+    const storageKey = getStorageKey();
+    const stored = localStorage.getItem(storageKey);
+
+    if (stored) {
+      return JSON.parse(stored);
+    }
+
+    const legacyStored = localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (legacyStored && getCurrentProfileCode() === DEFAULT_PROFILE_CODE) {
+      localStorage.setItem(storageKey, legacyStored);
+      return JSON.parse(legacyStored);
+    }
+
+    return {};
   } catch {
     return {};
   }
@@ -75,7 +115,7 @@ export function saveProgress(levelId: number, accuracy: number, avgTime: number,
       stars,
       mastered,
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    localStorage.setItem(getStorageKey(), JSON.stringify(current));
   }
 }
 

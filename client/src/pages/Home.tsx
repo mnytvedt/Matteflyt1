@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { Plus, Minus, X as Multiply, Star, Trophy, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { getCurrentProfileCode, setCurrentProfileCode } from "@/lib/progress";
 import heroImage from "@assets/generated_images/colorful_3d_math_symbols_floating_playfully.png";
 
 export default function Home() {
   const [, setLocation] = useLocation();
+  const [profileCode, setProfileCodeState] = useState("");
+
+  useEffect(() => {
+    setProfileCodeState(getCurrentProfileCode());
+  }, []);
+
+  const handleSaveProfileCode = () => {
+    const nextCode = profileCode.replace(/\D/g, "").slice(0, 4).padStart(4, "0") || "0000";
+    setCurrentProfileCode(nextCode);
+    setProfileCodeState(nextCode);
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -41,6 +54,36 @@ export default function Home() {
         <p className="text-xl text-muted-foreground mb-12 font-body max-w-md mx-auto">
           Velg tema og mestre matematikk med fart og presisjon!
         </p>
+
+        <Card className="max-w-md mx-auto mb-10 p-5 border-2 bg-white/80 backdrop-blur shadow-lg">
+          <div className="text-left space-y-3">
+            <div>
+              <h2 className="text-lg font-display font-bold text-foreground">Elevkode på denne iPad-en</h2>
+              <p className="text-sm text-muted-foreground">
+                Hver elev kan få sin egen 4-sifrede kode. Framgang lagres separat per kode.
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <Input
+                value={profileCode}
+                onChange={(event) => setProfileCodeState(event.target.value.replace(/\D/g, "").slice(0, 4))}
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder="0000"
+                maxLength={4}
+                className="text-lg tracking-[0.35em] text-center font-bold"
+              />
+              <Button onClick={handleSaveProfileCode} className="shrink-0">
+                Lagre
+              </Button>
+            </div>
+
+            <p className="text-sm text-muted-foreground">
+              Aktiv kode: <span className="font-bold text-foreground">{profileCode || "0000"}</span>
+            </p>
+          </div>
+        </Card>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-8">
           {/* Addition & Subtraction Category */}

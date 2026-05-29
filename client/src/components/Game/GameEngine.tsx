@@ -149,10 +149,10 @@ export default function GameEngine({ level }: GameEngineProps) {
   if (gameState === 'completed') {
     const accuracy = Math.round((score / level.questionCount) * 100);
     const avgTime = results.reduce((acc, curr) => acc + curr.time, 0) / results.length;
-    const isSuccess = accuracy >= level.passingScore;
-    
-    // Save progress with speed
-    saveProgress(level.id, accuracy, avgTime);
+    const maxTime = results.reduce((slowest, result) => Math.max(slowest, result.time), 0);
+    const isSuccess = accuracy === level.passingScore && maxTime < level.timeLimitPerQuestion;
+
+    saveProgress(level.id, accuracy, avgTime, maxTime);
 
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 animate-in zoom-in-95 duration-500">
@@ -168,16 +168,24 @@ export default function GameEngine({ level }: GameEngineProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
+        <div className="grid grid-cols-3 gap-4 w-full max-w-xl">
           <Card className="p-4 flex flex-col items-center bg-blue-50/50 border-blue-100">
             <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Nøyaktighet</span>
             <span className="text-3xl font-display font-bold text-blue-600">{accuracy}%</span>
           </Card>
           <Card className="p-4 flex flex-col items-center bg-orange-50/50 border-orange-100">
-            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Fart</span>
+            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Snittid</span>
             <span className="text-3xl font-display font-bold text-orange-600">{avgTime.toFixed(1)}s</span>
           </Card>
+          <Card className="p-4 flex flex-col items-center bg-violet-50/50 border-violet-100">
+            <span className="text-muted-foreground text-sm uppercase font-bold tracking-wider">Tregeste svar</span>
+            <span className="text-3xl font-display font-bold text-violet-600">{maxTime.toFixed(1)}s</span>
+          </Card>
         </div>
+
+        <p className="max-w-xl text-sm font-medium text-muted-foreground">
+          Neste nivå låses opp først når du har 100% riktige svar og alle oppgaver er løst på under {level.timeLimitPerQuestion} sekunder.
+        </p>
 
         {/* Review section for incorrect answers */}
         {results.filter(r => !r.correct).length > 0 && (
